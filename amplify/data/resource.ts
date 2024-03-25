@@ -1,4 +1,4 @@
-import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
+import { type ClientSchema, a, defineData } from '@aws-amplify/backend'
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -8,25 +8,42 @@ specify that owners, authenticated via your Auth resource can "create",
 authenticated via an API key, can only "read" records.
 =========================================================================*/
 const schema = a.schema({
-  Todo: a
+  MeetupGroup: a
     .model({
-      content: a.string(),
+      location: a.string(),
+      topic: a.string(),
+      name: a.string(),
+      description: a.string(),
+      events: a.hasMany('MeetupEvent'),
     })
-    .authorization([a.allow.owner(), a.allow.public().to(['read'])]),
-});
+    .authorization([
+      a.allow.owner(),
+      a.allow.public('iam').to(['read']),
+      a.allow.private('iam').to(['read']),
+    ]),
+  MeetupEvent: a
+    .model({
+      name: a.string(),
+      date: a.date(),
+      time: a.time(),
+      description: a.string(),
+      group: a.belongsTo('MeetupGroup'),
+    })
+    .authorization([
+      a.allow.owner(),
+      a.allow.public('iam').to(['read']),
+      a.allow.private('iam').to(['read']),
+    ]),
+})
 
-export type Schema = ClientSchema<typeof schema>;
+export type MeetupSchema = ClientSchema<typeof schema>
 
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'apiKey',
-    // API Key is used for a.allow.public() rules
-    apiKeyAuthorizationMode: {
-      expiresInDays: 30,
-    },
+    defaultAuthorizationMode: 'userPool',
   },
-});
+})
 
 /*== STEP 2 ===============================================================
 Go to your frontend source code. From your client-side code, generate a
