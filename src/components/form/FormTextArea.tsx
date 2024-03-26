@@ -29,3 +29,5 @@ export const FormTextArea = forwardRef<Ref, FormTextAreaProps>(
     )
   }
 )
+
+FormTextArea.displayName = 'FormTextArea'

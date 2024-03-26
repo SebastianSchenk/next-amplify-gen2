@@ -15,25 +15,27 @@ interface ManageGroupPageProps {
 
 const client = generateClient<MeetupSchema>()
 
+async function getMeetupGroup(groupId: string) {
+  const { data: meetupGroup } = await client.models.MeetupGroup.get({
+    id: groupId,
+  })
+
+  const { data: meetupEvents } = await meetupGroup.events()
+
+  return meetupEvents
+}
+
 export const ManageGroupPage: FunctionComponent<ManageGroupPageProps> = ({
   params,
 }) => {
   const { groupId } = params
   const [meetupEvents, setMeetupEvents] = useState<CardMeetupEvent[]>([])
 
-  async function getMeetupGroup() {
-    const { data: meetupGroup } = await client.models.MeetupGroup.get({
-      id: groupId,
-    })
-
-    const { data: meetupEvents } = await meetupGroup.events()
-
-    setMeetupEvents(meetupEvents)
-  }
-
   useEffect(() => {
-    getMeetupGroup()
-  }, [])
+    getMeetupGroup(groupId).then((meetupEvents) =>
+      setMeetupEvents(meetupEvents)
+    )
+  }, [groupId])
 
   return (
     <main className="mx-10">

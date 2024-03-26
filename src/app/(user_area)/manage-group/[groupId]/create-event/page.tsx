@@ -19,6 +19,14 @@ type FormInputs = Omit<MeetupSchema['MeetupEvent'], 'group'>
 
 const client = generateClient<MeetupSchema>()
 
+async function getMeetupGroup(groupId: string) {
+  const { data } = await client.models.MeetupGroup.get({
+    id: groupId,
+  })
+
+  return data
+}
+
 export const CreateEventPage: FunctionComponent<CreateEventPageProps> = ({
   params,
 }) => {
@@ -34,16 +42,9 @@ export const CreateEventPage: FunctionComponent<CreateEventPageProps> = ({
     formState: { errors },
   } = useForm<FormInputs>()
 
-  async function getMeetupGroup() {
-    const { data } = await client.models.MeetupGroup.get({
-      id: groupId,
-    })
-    setMeetupGroup(data)
-  }
-
   useEffect(() => {
-    getMeetupGroup()
-  }, [])
+    getMeetupGroup(groupId).then((data) => setMeetupGroup(data))
+  }, [groupId])
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     console.log('create event', data)

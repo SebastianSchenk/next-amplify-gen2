@@ -5,10 +5,23 @@ import { MeetupGroupCard } from '@/components/MeetupGroupCard'
 import { MeetupSchema } from '@@/amplify/data/resource'
 import { useAuthenticator } from '@aws-amplify/ui-react'
 import { generateClient } from 'aws-amplify/api'
+import { AuthUser } from 'aws-amplify/auth'
 import Link from 'next/link'
 import { FunctionComponent, useEffect, useState } from 'react'
 
 const client = generateClient<MeetupSchema>()
+
+async function listMeetupGroups(user: AuthUser) {
+  const { data } = await client.models.MeetupGroup.list({
+    filter: {
+      owner: {
+        contains: user.userId,
+      },
+    },
+  })
+
+  return data
+}
 
 const DashboardPage: FunctionComponent = () => {
   const { user } = useAuthenticator((context) => [context.user])
@@ -16,20 +29,9 @@ const DashboardPage: FunctionComponent = () => {
     MeetupSchema['MeetupGroup'][]
   >([])
 
-  async function listMeetupGroups() {
-    const { data } = await client.models.MeetupGroup.list({
-      filter: {
-        owner: {
-          contains: user.userId,
-        },
-      },
-    })
-    setMeetupGroups(data)
-  }
-
   useEffect(() => {
-    listMeetupGroups()
-  }, [])
+    listMeetupGroups(user).then((data) => setMeetupGroups(data))
+  }, [user])
 
   return (
     <main>

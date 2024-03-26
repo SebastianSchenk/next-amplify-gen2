@@ -29,3 +29,5 @@ export const FormInput = forwardRef<Ref, FormInputProps>(
     )
   }
 )
+
+FormInput.displayName = 'FormInput'

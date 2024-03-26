@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { FunctionComponent, useState } from 'react'
 import { UserIcon } from '@heroicons/react/24/outline'
 import { Button } from './Button'
+import Image from 'next/image'
 
 interface NavigationItem {
   label: string
@@ -34,7 +35,7 @@ export const Header: FunctionComponent = () => {
           href="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
-          <img src="/aws.png" className="h-8" alt="AWS Logo" />
+          <Image src="/aws.png" className="h-8" alt="AWS Logo" />
         </Link>
 
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">

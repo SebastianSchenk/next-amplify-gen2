@@ -46,3 +46,5 @@ export const FormSelect = forwardRef<Ref, FormSelectProps>(
     )
   }
 )
+
+FormSelect.displayName = 'FormSelect'
