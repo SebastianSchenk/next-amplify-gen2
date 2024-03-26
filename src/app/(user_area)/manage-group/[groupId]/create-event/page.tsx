@@ -6,7 +6,7 @@ import { FormTextArea } from '@/components/form/FormTextArea'
 import { MeetupSchema } from '@@/amplify/data/resource'
 import { generateClient } from 'aws-amplify/api'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 interface CreateEventPageProps {
@@ -27,9 +27,7 @@ async function getMeetupGroup(groupId: string) {
   return data
 }
 
-export const CreateEventPage: FunctionComponent<CreateEventPageProps> = ({
-  params,
-}) => {
+export default function CreateEventPage({ params }: CreateEventPageProps) {
   const { groupId } = params
 
   const router = useRouter()
@@ -88,5 +86,3 @@ export const CreateEventPage: FunctionComponent<CreateEventPageProps> = ({
     </main>
   )
 }
-
-export default CreateEventPage

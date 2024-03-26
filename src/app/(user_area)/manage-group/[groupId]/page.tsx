@@ -25,9 +25,7 @@ async function getMeetupGroup(groupId: string) {
   return meetupEvents
 }
 
-export const ManageGroupPage: FunctionComponent<ManageGroupPageProps> = ({
-  params,
-}) => {
+export default function ManageGroupPage({ params }: ManageGroupPageProps) {
   const { groupId } = params
   const [meetupEvents, setMeetupEvents] = useState<CardMeetupEvent[]>([])
 
@@ -56,5 +54,3 @@ export const ManageGroupPage: FunctionComponent<ManageGroupPageProps> = ({
     </main>
   )
 }
-
-export default ManageGroupPage
